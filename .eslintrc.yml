@@ -2,8 +2,11 @@ root: true
 env:
   browser: true
   node: true
+plugins":
+  - 'import'
+  - 'unused-imports'
 extends:
-  - "@nuxtjs"
-  - "@nuxtjs/eslint-config-typescript"
-  - "plugin:prettier/recommended"
-  - "plugin:nuxt/recommended"
+  - '@nuxtjs'
+  - '@nuxtjs/eslint-config-typescript'
+  - 'plugin:prettier/recommended'
+  - 'plugin:nuxt/recommended'

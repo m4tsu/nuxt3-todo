@@ -1,83 +1,73 @@
 <template>
   <div>
     <ul>
-      <li v-for="(todo, index) in todos">
+      <li v-for="(todo, index) in todos" :key="index">
         <input type="checkbox" v-model="todo.done" />
         <span>{{ todo.title }}</span
         >:
-        <span v-if="todo.type === 'number'">{{
+        <!-- <span v-if="todo.type === 'number'">{{
           todo.value.toExponential()
         }}</span
         ><span v-else>{{ todo.value.length }}</span>
-        <button @click="remove(index)">REMOVE</button>
+        <button @click="remove(index)">REMOVE</button> -->
       </li>
     </ul>
-    <input type="text" v-model="newToDoTitle" />
-    <button @click="add">ADD</button>
+    <!-- <input type="text" v-model="newToDoTitle" /> -->
+    <v-btn @click="getTodos">ADD</v-btn>
   </div>
+  <ul>
+    <li v-for="t in data" :key="t.id">
+      <p>id: {{ t.id }}</p>
+      <p>title: {{ t.title }}</p>
+      <p>done: {{ t.done }}</p>
+    </li>
+  </ul>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from '#imports'
-console.log('hogeeeeeeee')
-type ToDo = {
-  done: boolean
-  title: string
-} & (
-  | {
-      type: 'number'
-      value: number
-    }
-  | {
-      type: 'string'
-      value: string
-    }
-)
+import { Todo } from '@/entities/todo'
+import { todoRepository } from '@/composables/repositories/todo'
+import { User } from '~~/src/entities/user'
+import { useAllTodos } from '@/composables/usecase/todo'
+// type ToDo = {
+//   done: boolean
+//   title: string
+// } & (
+//   | {
+//       type: 'number'
+//       value: number
+//     }
+//   | {
+//       type: 'string'
+//       value: string
+//     }
+// )
 
 export default defineComponent({
-  head: {
-    title: 'My Page',
-  },
   setup() {
-    const todos = ref<ToDo[]>([
-      {
-        done: false,
-        title: 'これはやることです',
-        type: 'number',
-        value: 2,
-      },
-      {
-        done: true,
-        title: '二つ目のやること',
-        type: 'string',
-        value: 'hoge',
-      },
-      {
-        done: false,
-        title: '三つ目のやること',
-        type: 'number',
-        value: 899899,
-      },
-    ])
-    const newToDoTitle = ref<string>('')
-    const add = () => {
-      todos.value.push({
-        done: false,
-        title: newToDoTitle.value,
-        type: 'string',
-        value: 'hogeeeeeeeeeee',
-      })
-      newToDoTitle.value = ''
+    const todos = ref<Todo[]>([])
+    const users = ref<User[]>([])
+    const { data, error } = useAllTodos()
+    console.log(data.value, error.value)
+    const getTodos = async () => {
+      console.log('hogeeee')
+      const data = await todoRepository.getAll()
+      todos.value = todos.value.concat(data)
     }
-    const remove = (index: number) => {
+    // const getUsers =
+    const getTodoBy = (index: number) => {
       todos.value.splice(index, 1)
     }
-
+    watchEffect(() => console.log(todos.value))
     return {
       todos,
-      newToDoTitle,
-      add,
-      remove,
+      // newToDoTitle,
+      // add,
+      // remove,
+      getTodos,
+      data,
+      error,
     }
   },
 })
