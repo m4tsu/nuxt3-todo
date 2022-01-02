@@ -1,4 +1,5 @@
-import { getDocs, getDoc, doc } from 'firebase/firestore'
+import { getDocs, getDoc, doc, addDoc } from 'firebase/firestore'
+import { NewTodoFormParams, NewTodoParams, Todo } from '~~/src/entities/todo'
 import { collection, collectionGroup } from '~~/src/libs/firebase/db'
 
 export const todoRepository = {
@@ -18,6 +19,26 @@ export const todoRepository = {
       return ds.data()
     } else {
       throw new Error('not found')
+    }
+  },
+  post: async (userId: string, newTodoFormParams: NewTodoFormParams) => {
+    const newTodoParams: NewTodoParams = {
+      ...newTodoFormParams,
+      public: false,
+      done: false,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }
+    try {
+      const result = await addDoc(
+        collection('users/[userId]/todos', { userId }),
+        newTodoParams
+      )
+      const newTodo: Todo = { ...newTodoParams, id: result.id }
+      return newTodo
+    } catch (e) {
+      console.error(e)
+      throw e
     }
   },
 }

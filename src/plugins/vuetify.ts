@@ -13,6 +13,15 @@ import {
   VCard,
   VCardHeader,
   VCardText,
+  VRow,
+  VCol,
+  VContainer,
+  VInput,
+  VTextarea,
+  VCheckbox,
+  VLabel,
+  VForm,
+  VTextField,
 } from 'vuetify/components'
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -30,6 +39,15 @@ export default defineNuxtPlugin((nuxtApp) => {
       VCard,
       VCardHeader,
       VCardText,
+      VRow,
+      VCol,
+      VContainer,
+      VInput,
+      VTextarea,
+      VCheckbox,
+      VLabel,
+      VForm,
+      VTextField,
     },
   })
   nuxtApp.vueApp.use(vuetify)

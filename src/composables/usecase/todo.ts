@@ -10,3 +10,13 @@ export const useUserTodos = (userId: string) => {
     todoRepository.getUserTodos(userId)
   )
 }
+
+export const useTodo = (userId: string, todoId: string) => {
+  return useSWR(
+    {
+      route: 'users/[userId]/todos/[docId]',
+      params: { userId, docId: todoId },
+    },
+    () => todoRepository.getTodo(userId, todoId)
+  )
+}
